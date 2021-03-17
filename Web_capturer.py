@@ -28,14 +28,13 @@ class Web:
     
     def _info_arguments(self):
 
-        print("\n          usage")
+        print("usage")
         print("""\n
-
-    -i --info                       showing how to use this tool
-    -c --capturer                   specify which url you want to catch and scrap all parameters into csv file
-                \n
+        -i --info   =>       showing how to use this tool
+        -c --capturer   =>   specify which url you want to catch and scrap all parameters into csv file
+            \n
                 """)
-    
+
     def download_images(self, url, path):
 
         try:
@@ -47,10 +46,13 @@ class Web:
             #print(get.text)
             data = get.text
             base = BeautifulSoup(data, 'html.parser')
-            image_to_find = base.find("img")
-            
-            img = Image.open(requests.get(image_to_find['src'], stream=True).raw)
-            img.save("{}/images/imagen1.png".format(path))
+            image_to_find = base.findAll("img")
+            #print(image_to_find)
+            for x in image_to_find:
+                if "src" in x.attrs:
+                    print(x.attrs["src"])
+            #img = Image.open(requests.get(image_to_find['src'], stream=True).raw)
+            #img.save("{}/images/imagen1.png".format(path))
             
             
             #print(image_to_find.attrs["src"])
@@ -80,7 +82,7 @@ class Web:
                     #image = Image.open(requests.get(img_path, stream=True).raw)
                     #image.save(str(img_path))"""
         except Exception as e:
-            print(str(e))
+            print("Error by: ",str(e))
 
     def showing_arguments(self, path):
         
