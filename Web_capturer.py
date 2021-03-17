@@ -40,17 +40,20 @@ class Web:
         try:
             if os.path.isdir("{}/images".format(path)) is False:
                 os.makedirs("{}/images".format(path))
-            #print(url)
+            
             r = requests.session()
             get = r.get(url)
-            #print(get.text)
+            
             data = get.text
             base = BeautifulSoup(data, 'html.parser')
             image_to_find = base.findAll("img")
-            #print(image_to_find)
+            
+            counter = 1
             for x in image_to_find:
                 if "src" in x.attrs:
-                    print(x.attrs["src"])
+                    img = Image.open(requests.get(x.attrs["src"], stream = True).raw)
+                    img.save("{}/images/{}.png".format(path,str(counter)))
+                    counter += 1
             #img = Image.open(requests.get(image_to_find['src'], stream=True).raw)
             #img.save("{}/images/imagen1.png".format(path))
             
