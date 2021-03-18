@@ -69,12 +69,19 @@ class Web:
                     self._info_arguments()
                 
                 if o in ("-c", "--capturer"):
-                    self.download_images(a, path)
+                    #self.download_images(a, path)
+                    self._get_session(a)
         except Exception as e:
 
             print("Error by: ",str(e))
 
+    
+    def _get_session(self, url):
 
+        request = requests.session()
+        print("the cookies: %s"%request.cookies.get_dict())
+        request_get = request.get(url)
+        print(request_get.text)
 
 if __name__ == '__main__':
 
