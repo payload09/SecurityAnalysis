@@ -30,6 +30,7 @@ urllib3 = "==1.26.3"
 webencodings = "==0.5.1"
 CacheControl = "==0.12.6"
 Pillow = "==8.1.2"
+ipy = "*"
 
 [dev-packages]
 
