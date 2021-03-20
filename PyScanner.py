@@ -23,12 +23,9 @@ def check_ip(ip):
 def init_scanner(host, port):
     
     host_name = check_ip(host)
-    #print("[*] Initializing scanner...")
-    #host_name = socket.gethostbyname(host)
+    
     try:
-        #for port in range(1,1000):
         
-        #print(port) 
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         
         try:
