@@ -124,6 +124,7 @@ def init_process():
         for o,a in opts:
             
             if o in ('-s','--scanning'):
+                print("[*] Listing the open ports")
                 for x in range(1,1000):
                     show_port_opened(a, x)
                 exit()
