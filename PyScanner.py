@@ -126,7 +126,7 @@ def init_process():
             if o in ('-s','--scanning'):
                 for x in range(1,1000):
                     show_port_opened(a, x)
-
+                exit()
             elif o in ('-g','--general'):
                 pass
 
