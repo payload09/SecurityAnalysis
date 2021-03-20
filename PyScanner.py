@@ -9,31 +9,45 @@ from IPy import IP
 
 
 
-def init_variables():
+def global_variables():
     global payload
     global path
+    global stack 
 
+    payload = ''
+    path = "/usr/bin/bash" # path to reverse shell
+    stack = list()
 # initializr this funciton to get the global variables in whole the code.
-init_variables()
+global_variables()
 
 
 
 
 # this will be contain the value for use on bufferoverflow
-payload = ''
-path = "/usr/bin/bash" # path to reverse shell
+
 def check_ip(ip):
 
     try:
         IP(ip)
         return ip
-    except ValueError as e:
-
+    except:
         return socket.gethostbyname(ip)
 
 
-def show_port_opened(host, port):
 
+
+def reverse_shell(list_ports):
+
+
+    pass
+
+
+
+
+
+def show_port_opened(host, port):
+    
+    # list all the ports open
     host_name = check_ip(host)
 
     try:
@@ -42,12 +56,16 @@ def show_port_opened(host, port):
 
         try:
             sock.connect((host_name, port))
-            print("target %s  and port open %s"%(host_name,port))
+            print()
+            #print("target %s  and port open %s"%(host_name,port))
         except Exception:
-            pass
+            return None
             #print("can't open the port")
-    except Exception as e:
-        print("Error in init_scanner by: ",str(e))
+
+        return port
+    except:
+        return None
+        #print("Error in init_scanner by: ",str(e))
 
 
 
@@ -60,7 +78,10 @@ def init_process():
 
             if o in ('-s','--scanning'):
                 for x in range(1,1000):
-                    show_port_opened(a, x)
+                    if show_port_opened(a, x) is not None:
+                        stack.append(show_port_opened(a,x))
+
+        print(stack)
     except Exception as e:
         print(str(e))
 
