@@ -8,8 +8,8 @@ import os
 from IPy import IP
 
 
-
-
+# this will be contain the value for use on bufferoverflow
+payload = ''
 
 def check_ip(ip):
     
@@ -22,8 +22,6 @@ def check_ip(ip):
 
 def init_scanner(host, port):
     
-    #print(host)
-    #host_name = socket.gethostbyname(heck_ip(host))
     host_name = check_ip(host)
     #print("[*] Initializing scanner...")
     #host_name = socket.gethostbyname(host)
