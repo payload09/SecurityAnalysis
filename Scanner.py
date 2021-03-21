@@ -11,8 +11,8 @@ class Socket_connection:
 
     def __init__(self, host_, port_):
         self.sock = None
-        self.port = port_
         self.host = host_
+        self.port = port_
         self.host_name = None
         self.connect = None
         self.address = None
@@ -29,15 +29,28 @@ class Socket_connection:
 
 
     def socket_bind(self):
-        self.list_ports_openeds()
+        # self.list_ports_openeds()
         try:
-            
-            """Getting the connection to server, in this case the server is VM Metasploitable"""
-            self.sock.connect((str(self.host), int (self.port)))
-            print("[*] Connection stablished...")
+            socket_connect = sock.connect((str(self.host), int(self.port)))
+            banner = socket_connect.recv(1024)
+            port_info = colored("[+] {port} open".format(port=self.port),"green")
+            banner = str(banner).replace("b'", "")
+            print(port_info+"\t"+banner)
         except Exception as e:
-            print("Socket binding error: ", str(e))
-            #self.socket_bind()
+            print(str(e))
+        # try:
+            
+        #     """Getting the connection to server, in this case the server is VM Metasploitable"""
+        #     try:
+        #         for x in list_ports_openeds:
+        #             self.sock.connect((str(self.host), int(x)))
+        #             print("[*] Connection stablished...")
+
+        #     except socket.error as e:
+        #         print("Can't be possible connect with the host")
+        # except Exception as e:
+        #     print("Socket binding error: ", str(e))
+        #     #self.socket_bind()
             
     def socket_accept_connection(self):
 
@@ -56,12 +69,10 @@ class Socket_connection:
             try:
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 sock.connect((host, port))
-                self.message = sock.recv(1024)
-                print(self.message)
                 self.port_list_open.append(port)
                 print("[*] Port %s open %s "%(port, socket.getnameinfo((self.host, port), socket.NI_NUMERICHOST)))
             except:
-                return None
+                pass
         try:
             print("[*] Trying to connect at %s ..."%self.host)
             print("")
@@ -74,25 +85,12 @@ class Socket_connection:
 
         
 if __name__ == '__main__':
-    sock = Socket_connection("192.168.100.209",22)
-    sock.socket_create()
-    sock.socket_bind()
-    sock.socket_accept_connection()
+    
+    #sock.socket_create()
+    for x in range(1,1000):
+        sock = Socket_connection("192.168.100.209", x)
+        sock.socket_bind()
 
 
-# sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# host = "192.168.100.209"
-# port = 21
-
-# try:
-#     sock.connect((str(host), int(port)))
-#     print("[*] Connection was donde successfully")
-# except Exception as e:
-#     print("Error by: ", str(e))
-
-
-
-
-
-
+   
 
