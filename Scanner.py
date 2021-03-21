@@ -16,7 +16,7 @@ class Socket_connection:
         self.host_name = None
         self.connect = None
         self.address = None
-        
+        self.message = None
         self.port_list_open = list()
 
     def socket_create(self):
@@ -56,6 +56,8 @@ class Socket_connection:
             try:
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 sock.connect((host, port))
+                self.message = sock.recv(1024)
+                print(self.message)
                 self.port_list_open.append(port)
                 print("[*] Port %s open %s "%(port, socket.getnameinfo((self.host, port), socket.NI_NUMERICHOST)))
             except:
@@ -71,9 +73,6 @@ class Socket_connection:
             print("Error by: ",str(error))
 
         
-    
-
-
 if __name__ == '__main__':
     sock = Socket_connection("192.168.100.209",22)
     sock.socket_create()
