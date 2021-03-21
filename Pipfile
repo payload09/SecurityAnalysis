@@ -26,11 +26,13 @@ requests = "==2.25.1"
 retrying = "==1.3.3"
 six = "==1.14.0"
 soupsieve = "==2.2"
+termcolor = "==1.1.0"
+toml = "==0.10.2"
 urllib3 = "==1.26.3"
 webencodings = "==0.5.1"
 CacheControl = "==0.12.6"
+IPy = "==1.1"
 Pillow = "==8.1.2"
-ipy = "*"
 
 [dev-packages]
 
